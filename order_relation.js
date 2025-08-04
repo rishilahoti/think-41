@@ -24,12 +24,14 @@ app.get('/orders', async (req, res) => {
 });
 
 app.get('/users', async (req, res) => {
-	try {
-		const result = await pool.query('SELECT * FROM users');
-		res.json(result.rows);
-	} catch (error) {
-		res.status(500).json({ error: 'Database Error' });
-	}
+    try {
+        const limit = parseInt(req.query.limit) || 50;
+        const offset = parseInt(req.query.offset) || 0;
+        const result = await pool.query('SELECT * FROM users LIMIT $1 OFFSET $2', [limit, offset]);
+        res.json(result.rows);
+    } catch (error) {
+        res.status(500).json({ error: 'Database Error' });
+    }
 });
 
 app.get('/users/:userId/orders', async (req, res) => {
