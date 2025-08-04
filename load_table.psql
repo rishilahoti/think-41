@@ -1,0 +1,3 @@
+\copy users(first_name, last_name, email, age, gender, state, street_address, postal_code, city, country, latitude, longitude, traffic_source, created_at) FROM 'C:/Users/rishi/OneDrive/Desktop/assignment/think-41/archive/users.csv' WITH CSV HEADER;
+
+\copy orders FROM 'C:/Users/rishi/OneDrive/Desktop/assignment/think-41/archive/orders.csv' WITH CSV HEADER; 
