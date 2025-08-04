@@ -1,7 +1,9 @@
 const express = require('express');
 const { Pool } = require('pg');
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 const pool = new Pool({
@@ -23,13 +25,8 @@ app.get('/orders', async (req, res) => {
 
 app.get('/users', async (req, res) => {
 	try {
-		const result = await pool.query('SELECT id, first_name, last_name, email FROM users');
-		const users = result.rows.map(user => ({
-            id: users.id,
-            name: `${user.first_name} ${user.last_name}`,
-            email: user.email,
-        }))
-        res.json(users);
+		const result = await pool.query('SELECT * FROM users');
+		res.json(result.rows);
 	} catch (error) {
 		res.status(500).json({ error: 'Database Error' });
 	}
@@ -56,6 +53,6 @@ app.get('/users/:userId/orders', async (req, res) => {
 	}
 });
 
-app.listen(3000, () => {
-	console.log('Server is running on port 3000');
+app.listen(4000, () => {
+	console.log('Server is running on port 4000');
 });

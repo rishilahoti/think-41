@@ -9,7 +9,7 @@ export default function Home() {
 	const [selectedUser, setSelectedUser] = useState(null);
 
 	useEffect(() => {
-		fetch('https://localhost:3000/users')
+		fetch('http://localhost:4000/users')
 			.then((response) => response.json())
 			.then((data) => setUsers(data))
 			.catch((error) => console.error('Error fetching users:', error));
@@ -17,14 +17,15 @@ export default function Home() {
 
 	useEffect(() => {
 		if (!selectedUser) return;
-		fetch(`https://localhost:3000/users/${selectedUser.id}/orders`)
+		fetch(`http://localhost:4000/users/${selectedUser.id}/orders`)
 			.then((response) => response.json())
 			.then((data) => setOrders(data))
 			.catch((error) => console.error('Error fetching orders:', error));
 	}, [selectedUser]);
 
 	const filtered = users.filter((user) =>
-		user.name.toLowerCase().includes(search.toLowerCase()) ||
+		user.first_name.toLowerCase().includes(search.toLowerCase()) ||
+        user.last_name.toLowerCase().includes(search.toLowerCase()) ||
         user.email.toLowerCase().includes(search.toLowerCase())
 	);
 
@@ -44,7 +45,6 @@ export default function Home() {
                         <th className='border p-2'>ID</th>
                         <th className='border p-2'>Name</th>
                         <th className='border p-2'>Email</th>
-                        <th className='border p-2'>Order Count</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,11 +57,21 @@ export default function Home() {
                             <td className='border p-2'>{user.id}</td>
                             <td className='border p-2'>{user.first_name}</td>
                             <td className='border p-2'>{user.email}</td>
-                            <td className='border p-2'>{user.orderCount || 0}</td>
                         </tr>
                     ))}
+                    
                 </tbody>
             </table>
+            {selectedUser && (
+                <div className='mt-6 p-4'>
+                    <h3>
+                        <p>
+                            Name: {selectedUser.first_name} {selectedUser.last_name}
+                        </p>
+                        <p>Email: {selectedUser.email}</p>
+                    </h3>
+                </div>
+            )}
         </main>
     );
 }
